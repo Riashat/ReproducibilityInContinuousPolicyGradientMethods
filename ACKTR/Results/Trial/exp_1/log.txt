@@ -1,0 +1,72 @@
+Logging to ././Results/Trial//exp_1/
+********** Iteration 0 ************
+kl too low
+---------------------------
+| EVAfter   | 0.235       |
+| EVBefore  | -0.02       |
+| EpLenMean | 18          |
+| EpRewMean | 13.9        |
+| EpRewSEM  | 0.964       |
+| KL        | 9.67449e-06 |
+---------------------------
+********** Iteration 1 ************
+kl too low
+---------------------------
+| EVAfter   | 0.328       |
+| EVBefore  | 0.181       |
+| EpLenMean | 18.6        |
+| EpRewMean | 14.2        |
+| EpRewSEM  | 0.981       |
+| KL        | 0.000103336 |
+---------------------------
+********** Iteration 2 ************
+kl too low
+---------------------------
+| EVAfter   | 0.315       |
+| EVBefore  | 0.298       |
+| EpLenMean | 19.1        |
+| EpRewMean | 15.4        |
+| EpRewSEM  | 1.24        |
+| KL        | 0.000521057 |
+---------------------------
+********** Iteration 3 ************
+kl too low
+---------------------------
+| EVAfter   | 0.398       |
+| EVBefore  | 0.382       |
+| EpLenMean | 18.3        |
+| EpRewMean | 14.3        |
+| EpRewSEM  | 1.09        |
+| KL        | 0.000419547 |
+---------------------------
+********** Iteration 4 ************
+kl just right!
+--------------------------
+| EVAfter   | 0.314      |
+| EVBefore  | 0.29       |
+| EpLenMean | 19.4       |
+| EpRewMean | 15.8       |
+| EpRewSEM  | 1.15       |
+| KL        | 0.00318494 |
+--------------------------
+********** Iteration 5 ************
+kl too high
+-------------------------
+| EVAfter   | 0.286     |
+| EVBefore  | 0.269     |
+| EpLenMean | 23.8      |
+| EpRewMean | 21.9      |
+| EpRewSEM  | 1.86      |
+| KL        | 0.0116583 |
+-------------------------
+********** Iteration 6 ************
+kl too high
+-------------------------
+| EVAfter   | 0.232     |
+| EVBefore  | 0.16      |
+| EpLenMean | 27        |
+| EpRewMean | 32.1      |
+| EpRewSEM  | 3.91      |
+| KL        | 0.0202155 |
+-------------------------
+********** Iteration 7 ************

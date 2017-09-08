@@ -41,7 +41,7 @@ class CnnPolicy(object):
 
 
 class GaussianMlpPolicy(object):
-    def __init__(self, ob_dim, ac_dim, network_size, network_activation):
+    def __init__(self, ob_dim, ac_dim, policy_activation, policy_size):
         # Here we'll construct a bunch of expressions, which will be used in two places:
         # (1) When sampling actions
         # (2) When computing loss functions, for the policy update
@@ -54,15 +54,25 @@ class GaussianMlpPolicy(object):
         oldlogprob_n = tf.placeholder(tf.float32, shape=[None], name='oldlogprob') # log probability of previous actions
         wd_dict = {}
 
-        if network_activation=='tanh':
-            h1 = tf.nn.tanh(dense(ob_no, network_size, "h1", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
-            h2 = tf.nn.tanh(dense(h1, network_size, "h2", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))            
-        elif network_activation=='relu':
-            h1 = tf.nn.relu(dense(ob_no, network_size, "h1", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
-            h2 = tf.nn.relu(dense(h1, network_size, "h2", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))     
+        if policy_activation=="tanh":
+            h1 = tf.nn.tanh(dense(ob_no, policy_size, "h1", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
+            h2 = tf.nn.tanh(dense(h1, policy_size, "h2", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict)) 
+            
+        elif policy_activation=="relu":       
+            h1 = tf.nn.relu(dense(ob_no, policy_size, "h1", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
+            h2 = tf.nn.relu(dense(h1, policy_size, "h2", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
+
+
+        elif policy_activation=="elu":
+            h1 = tf.nn.elu(dense(ob_no, policy_size, "h1", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict)) 
+            h2 = tf.nn.elu(dense(h1, policy_size, "h2", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict)) 
+
 
         # h1 = tf.nn.tanh(dense(ob_no, 64, "h1", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
         # h2 = tf.nn.tanh(dense(h1, 64, "h2", weight_init=U.normc_initializer(1.0), bias_init=0.0, weight_loss_dict=wd_dict))
+
+
+
         mean_na = dense(h2, ac_dim, "mean", weight_init=U.normc_initializer(0.1), bias_init=0.0, weight_loss_dict=wd_dict) # Mean control output
         self.wd_dict = wd_dict
         self.logstd_1a = logstd_1a = tf.get_variable("logstd", [ac_dim], tf.float32, tf.zeros_initializer()) # Variance on outputs
@@ -86,3 +96,8 @@ class GaussianMlpPolicy(object):
     def act(self, ob):
         ac, ac_dist, logp = self._act(ob[None])
         return ac[0], ac_dist[0], logp[0]
+
+    def lrelu(x, leak=0.2):
+        f1 = 0.5 * (1 + leak)
+        f2 = 0.5 * (1 - leak)
+        return f1 * x + f2 * abs(x)

@@ -1,0 +1,42 @@
+Logging to ./Results/Trial/
+********** Iteration 0 ************
+kl too low
+---------------------------
+| EVAfter   | -0.155      |
+| EVBefore  | -0.0333     |
+| EpLenMean | 1e+03       |
+| EpRewMean | -304        |
+| EpRewSEM  | 11.7        |
+| KL        | 2.11797e-06 |
+---------------------------
+********** Iteration 1 ************
+kl too low
+---------------------------
+| EVAfter   | -0.0698     |
+| EVBefore  | -0.357      |
+| EpLenMean | 1e+03       |
+| EpRewMean | -322        |
+| EpRewSEM  | 39.2        |
+| KL        | 1.88639e-05 |
+---------------------------
+********** Iteration 2 ************
+kl just right!
+--------------------------
+| EVAfter   | 0.162      |
+| EVBefore  | -0.12      |
+| EpLenMean | 1e+03      |
+| EpRewMean | -363       |
+| EpRewSEM  | 31.8       |
+| KL        | 0.00269527 |
+--------------------------
+********** Iteration 3 ************
+kl just right!
+--------------------------
+| EVAfter   | 0.0489     |
+| EVBefore  | -0.143     |
+| EpLenMean | 1e+03      |
+| EpRewMean | -274       |
+| EpRewSEM  | 9.14       |
+| KL        | 0.00224611 |
+--------------------------
+********** Iteration 4 ************

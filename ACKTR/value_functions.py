@@ -3,17 +3,30 @@ import numpy as np
 from baselines import common
 from baselines.common import tf_util as U
 import tensorflow as tf
-import kfac
-from utils import dense
+from baselines.acktr import kfac
+from baselines.acktr.utils import dense
 
 class NeuralNetValueFunction(object):
-    def __init__(self, ob_dim, ac_dim, network_size, network_activation): #pylint: disable=W0613
+    def __init__(self, ob_dim, ac_dim, value_activation, value_size): #pylint: disable=W0613
         X = tf.placeholder(tf.float32, shape=[None, ob_dim*2+ac_dim*2+2]) # batch of observations
         vtarg_n = tf.placeholder(tf.float32, shape=[None], name='vtarg')
         wd_dict = {}
 
-        h1 = tf.nn.elu(dense(X, network_size, "h1", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))
-        h2 = tf.nn.elu(dense(h1, network_size, "h2", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))
+        if value_activation=="tanh":
+            h1 = tf.nn.tanh(dense(X, value_size, "h1", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))
+            h2 = tf.nn.tanh(dense(h1, value_size, "h2", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))
+
+        elif value_activation=="relu":
+            h1 = tf.nn.relu(dense(X, value_size, "h1", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))
+            h2 = tf.nn.relu(dense(h1, value_size, "h2", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))        
+
+        elif value_activation=="elu":
+            h1 = tf.nn.elu(dense(X, value_size, "h1", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))
+            h2 = tf.nn.elu(dense(h1, value_size, "h2", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))                
+
+
+        # h1 = tf.nn.elu(dense(X, 64, "h1", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))
+        # h2 = tf.nn.elu(dense(h1, 64, "h2", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict))
 
         vpred_n = dense(h2, 1, "hfinal", weight_init=U.normc_initializer(1.0), bias_init=0, weight_loss_dict=wd_dict)[:,0]
         sample_vpred_n = vpred_n + tf.random_normal(tf.shape(vpred_n))
@@ -33,9 +46,6 @@ class NeuralNetValueFunction(object):
         update_op, self.q_runner = optim.minimize(loss, loss_sampled, var_list=vf_var_list)
         self.do_update = U.function([X, vtarg_n], update_op) #pylint: disable=E1101
         U.initialize() # Initialize uninitialized TF variables
-
-
-
     def _preproc(self, path):
         l = pathlength(path)
         al = np.arange(l).reshape(-1,1)/10.0
